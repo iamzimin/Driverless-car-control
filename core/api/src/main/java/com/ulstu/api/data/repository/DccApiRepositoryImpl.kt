@@ -9,8 +9,10 @@ import com.ulstu.api.domain.models.SystemInfoResponse
 import com.ulstu.api.domain.repository.DccApiRepository
 import com.ulstu.api.domain.service.DccApi
 import com.ulstu.api.domain.utils.NetworkError
+import com.ulstu.api.domain.utils.PingStatus
 import com.ulstu.api.domain.utils.RequestResult
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.filter
@@ -47,51 +49,34 @@ class DccApiRepositoryImpl(
         }
     }
 
-    override suspend fun scanNetwork(): Flow<List<String>> = flow {
+    override suspend fun scanNetwork(): Flow<PingStatus> = flow {
         val localIp = getLocalIp() ?: return@flow
         val ipRange = generateIpRange(localIp)
-        val availableIps = mutableListOf<String>()
 
         ipRange.asFlow()
-            .filter { pingIp(it) }
             .collect { ip ->
-                availableIps.add(ip)
-                emit(availableIps.toList())
+                val status = if (pingIp(ip)) {
+                    PingStatus.PingSuccess(ip = ip)
+                } else {
+                    PingStatus.PingFail(ip = ip)
+                }
+                emit(status)
             }
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun getSystemInfo(foundedIpv4: List<String>): RequestResult<Flow<List<SystemInfoResponse?>>, NetworkError> {
-        return try {
-            val flow = flow {
-                val discoveredInfo = mutableListOf<SystemInfoResponse?>()
-
-                foundedIpv4.asFlow()
-                    .flatMapMerge { ip ->
-                        flow {
-                            val api = createApiForIp(ip)
-                            val result = safeApiCall { api.getSystemInfo() }
-                            if (result is RequestResult.Success) {
-                                emit(result.data)
-                            }
-                        }
-                    }
-                    .collect { response ->
-                        discoveredInfo.add(response)
-                        emit(discoveredInfo.toList())
-                    }
-            }.flowOn(Dispatchers.IO)
-
-            RequestResult.Success(flow)
-        } catch (e: Exception) {
-            RequestResult.Error(NetworkError.UNKNOWN)
+    override suspend fun getSystemInfo(foundedIpv4: List<String>): Flow<RequestResult<SystemInfoResponse?, NetworkError>> = flow {
+        for (ip in foundedIpv4) {
+            val retrofit = createApiForIp(ip)
+            val result = safeApiCall { retrofit.getSystemInfo() }
+            emit(result)
         }
-    }
+    }.flowOn(Dispatchers.IO)
+
 
     private fun createApiForIp(ip: String): DccApi {
         val baseUrl = "http://$ip/"
         return dccRetrofitBuilder.baseUrl(baseUrl).build().create(DccApi::class.java)
     }
-
 
     private fun getLocalIp(): String? {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -118,7 +103,7 @@ class DccApiRepositoryImpl(
     private suspend fun pingIp(ip: String): Boolean {
         return withContext(Dispatchers.IO) {
             try {
-                InetAddress.getByName(ip).isReachable(100)
+                InetAddress.getByName(ip).isReachable(50)
             } catch (e: Exception) {
                 false
             }

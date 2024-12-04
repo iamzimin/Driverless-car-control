@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ulstu.block_scanner.presentation.BlockScannerRoot
 import com.ulstu.resource.LocalNavHostController
 import com.ulstu.resource.ui.theme.AppTheme
 import com.ulstu.resource.ui.theme.DriverlessCarControlTheme
@@ -18,7 +19,7 @@ import com.ulstu.resource.ui.theme.DriverlessCarControlTheme
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-    val startDestination = "main"
+    val startDestination = "block-scanner"
 
     CompositionLocalProvider(LocalNavHostController provides navController) {
         Scaffold(
@@ -30,8 +31,8 @@ fun MainScreen() {
                 startDestination = startDestination,
                 modifier = Modifier.padding(paddingValues)
             ) {
-                composable(route = "") {
-                    //
+                composable(route = "block-scanner") {
+                    BlockScannerRoot()
                 }
             }
         }

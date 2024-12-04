@@ -52,4 +52,7 @@ dependencies {
     //Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+
+    //Okhttp3
+    implementation(libs.okhttp3.interceptor)
 }

@@ -12,7 +12,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.ulstu.resource.ui.theme.AppSize
 import com.ulstu.resource.ui.theme.AppStyle
 import com.ulstu.resource.ui.theme.DriverlessCarControlTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +27,7 @@ class MainActivity : ComponentActivity() {
                 style = currentStyle.value,
                 textSize = currentFontSize.value,
             ) {
-                //MainScreen()
+                MainScreen()
             }
         }
     }
@@ -36,6 +38,6 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun MainActivityPreview() {
     DriverlessCarControlTheme {
-        //MainScreen()
+        MainScreen()
     }
 }

@@ -12,8 +12,10 @@ composeBom = "2024.11.00"
 appcompat = "1.7.0"
 material = "1.12.0"
 hilt = "2.50"
+hiltNavigation = "1.2.0"
 retrofit = "2.9.0"
 converterGson = "2.3.0"
+okhttp3Interceptor = "5.0.0-alpha.10"
 orbit = "9.0.0"
 navigation = "2.8.4"
 espressoCoreVersion = "3.6.1"
@@ -40,10 +42,12 @@ material = { group = "com.google.android.material", name = "material", version.r
 # Retrofit
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
+okhttp3-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3Interceptor" }
 
 # Dagger hilt
 dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+dagger-hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigation" }
 
 # MVI Orbit
 mvi-orbit-core = { group = "org.orbit-mvi", name = "orbit-core", version.ref = "orbit" }
