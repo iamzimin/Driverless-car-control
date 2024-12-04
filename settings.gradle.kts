@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Driverless car control"
 include(":app")
- 
+include(":core:api")
+include(":core:resource")
