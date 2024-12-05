@@ -73,7 +73,11 @@ fun BlockScannerScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = HorizontalPadding, vertical = VerticalPadding)
+            .padding(
+                bottom = VerticalPadding,
+                start = HorizontalPadding,
+                end = HorizontalPadding,
+            )
     ) {
         Box(
             modifier = Modifier

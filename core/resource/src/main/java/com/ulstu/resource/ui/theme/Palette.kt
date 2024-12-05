@@ -12,6 +12,9 @@ data class AppPalette(
     // Tile
     val tileTextInvisible: Color,
     val tileBackground: Color,
+
+    // NavigationDrawer
+    //val navigationDrawerBackground: Color,
 )
 
 enum class AppStyle {
@@ -21,7 +24,7 @@ enum class AppStyle {
 
 val baseDarkPalette = AppPalette(
     primary = Color(0xFFC6B8FF),
-    secondary = Color(0xFF4F378B),
+    secondary = Color(0xFF2A2A42),
     background = Color(0xFF161622),
 
     text = Color(0xFFFFFFFF),
@@ -29,6 +32,9 @@ val baseDarkPalette = AppPalette(
     // Tile
     tileTextInvisible = Color(0xFF6C6D8D),
     tileBackground = Color(0xFF1C1C2D),
+
+    // NavigationDrawer
+    //navigationDrawerBackground = Color(0xFF2E2E36),
 )
 
 val baseLightPalette = AppPalette(
@@ -41,5 +47,8 @@ val baseLightPalette = AppPalette(
     // Tile
     tileTextInvisible = Color(0xFF6C6D8D),
     tileBackground = Color(0xFFF1F1F1),
+
+    // NavigationDrawer
+    //navigationDrawerBackground = Color(0xFF2E2E36),
 )
 
