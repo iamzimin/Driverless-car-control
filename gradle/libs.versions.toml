@@ -18,7 +18,8 @@ converterGson = "2.3.0"
 okhttp3Interceptor = "5.0.0-alpha.10"
 orbit = "9.0.0"
 navigation = "2.8.4"
-espressoCoreVersion = "3.6.1"
+swipeRefresh = "0.24.13-rc"
+shimmer = "1.3.0"
 
 
 [libraries]
@@ -56,7 +57,13 @@ mvi-orbit-compose = { group = "org.orbit-mvi", name = "orbit-compose", version.r
 
 # Navigation
 androidx-ui-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCoreVersion" }
+
+# Swipe Refresh
+swiperefresh-compose = { group = "com.google.accompanist", name = "accompanist-swiperefresh", version.ref = "swipeRefresh" }
+
+# Shimmer
+shimmer-compose = { group = "com.valentinilk.shimmer", name = "compose-shimmer", version.ref = "shimmer" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

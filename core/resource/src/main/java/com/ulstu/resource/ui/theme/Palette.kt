@@ -9,9 +9,9 @@ data class AppPalette(
 
     val text: Color,
 
-    // TextField
-    val textField: Color,
-    val textFieldBackground: Color,
+    // Tile
+    val tileTextInvisible: Color,
+    val tileBackground: Color,
 )
 
 enum class AppStyle {
@@ -26,9 +26,9 @@ val baseDarkPalette = AppPalette(
 
     text = Color(0xFFFFFFFF),
 
-    // TextField
-    textField = Color(0xFF6C6D8D),
-    textFieldBackground = Color(0xFF1C1C2D),
+    // Tile
+    tileTextInvisible = Color(0xFF6C6D8D),
+    tileBackground = Color(0xFF1C1C2D),
 )
 
 val baseLightPalette = AppPalette(
@@ -38,8 +38,8 @@ val baseLightPalette = AppPalette(
 
     text = Color(0xFF000000),
 
-    // TextField
-    textField = Color(0xFF6C6D8D),
-    textFieldBackground = Color(0xFFF1F1F1),
+    // Tile
+    tileTextInvisible = Color(0xFF6C6D8D),
+    tileBackground = Color(0xFFF1F1F1),
 )
 

@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Driverless car control</string>
+
+    <!--Block scanner screen-->
+    <string name="detected_blocks">Detected blocks</string>
+    <string name="no_ip_found_network">No IP found on the network</string>
+    <string name="scanning_ip_addresses">Scanning IP addresses</string>
+    <string name="success">success</string>
+    <string name="fail">fail</string>
+    <string name="found">found</string>
+    <string name="error">error</string>
+    <string name="blocks_not_found">The blocks were not found</string>
+    <string name="swipe_to_update">Swipe to update</string>
+    <string name="block">Block</string>
+    <string name="ip">ip</string>
+    <string name="mask">Mask</string>
+    <string name="gateway">Gateway</string>
+
+
 </resources>

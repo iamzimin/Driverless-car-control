@@ -9,19 +9,19 @@ import com.ulstu.api.domain.models.SystemInfoResponse
 import com.ulstu.api.domain.repository.DccApiRepository
 import com.ulstu.api.domain.service.DccApi
 import com.ulstu.api.domain.utils.NetworkError
-import com.ulstu.api.domain.utils.PingStatus
+import com.ulstu.api.domain.models.PingStatusResponse
 import com.ulstu.api.domain.utils.RequestResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import retrofit2.Retrofit
+import java.net.ConnectException
 import java.net.Inet4Address
 import java.net.InetAddress
 import java.net.SocketTimeoutException
@@ -30,30 +30,33 @@ class DccApiRepositoryImpl(
     private val context: Context,
     private val dccRetrofitBuilder: Retrofit.Builder,
 ): DccApiRepository {
-    private suspend fun <T> safeApiCall(apiCall: suspend () -> T): RequestResult<T, NetworkError> {
+    private suspend fun <T> safeApiCall(url: String, apiCall: suspend () -> T): RequestResult<T, NetworkError> {
         return try {
             RequestResult.Success(apiCall())
         } catch (e: JsonParseException) {
-            RequestResult.Error(NetworkError.SERIALIZATION)
+            RequestResult.Error(url, NetworkError.SERIALIZATION)
         } catch (e: HttpException) {
             when (e.code()) {
-                408 -> RequestResult.Error(NetworkError.REQUEST_TIMEOUT)
-                429 -> RequestResult.Error(NetworkError.TOO_MANY_REQUESTS)
-                in 500..599 -> RequestResult.Error(NetworkError.SERVER_ERROR)
-                else -> RequestResult.Error(NetworkError.UNKNOWN)
+                408 -> RequestResult.Error(url, NetworkError.REQUEST_TIMEOUT)
+                429 -> RequestResult.Error(url, NetworkError.TOO_MANY_REQUESTS)
+                in 500..599 -> RequestResult.Error(url, NetworkError.SERVER_ERROR)
+                else -> RequestResult.Error(url, NetworkError.UNKNOWN)
             }
         } catch (e: SocketTimeoutException) {
-            RequestResult.Error(NetworkError.REQUEST_TIMEOUT)
+            RequestResult.Error(url, NetworkError.REQUEST_TIMEOUT)
+        } catch (e: ConnectException) {
+            RequestResult.Error(url, NetworkError.CONNECT_EXCEPTION)
         } catch (e: Exception) {
-            RequestResult.Error(NetworkError.UNKNOWN)
+            RequestResult.Error(url, NetworkError.UNKNOWN)
         }
     }
 
-    override suspend fun scanNetwork(): Flow<PingStatus> = flow {
+    @OptIn(FlowPreview::class)
+    override suspend fun scanNetwork(): Flow<PingStatusResponse> = flow {
         val localIp = getLocalIp() ?: return@flow
         val ipRange = generateIpRange(localIp)
 
-        ipRange.asFlow()
+        /*ipRange.asFlow()
             .collect { ip ->
                 val status = if (pingIp(ip)) {
                     PingStatus.PingSuccess(ip = ip)
@@ -62,12 +65,32 @@ class DccApiRepositoryImpl(
                 }
                 emit(status)
             }
+     }.flowOn(Dispatchers.IO)*/
+
+        ipRange.asFlow()
+            .flatMapMerge(concurrency = 50) { ip ->
+                flow {
+                    val status = if (pingIp(ip)) {
+                        PingStatusResponse.PingSuccess(ip = ip)
+                    } else {
+                        PingStatusResponse.PingFail(ip = ip)
+                    }
+                    emit(status)
+                }
+            }
+            .collect { status ->
+                emit(status)
+            }
     }.flowOn(Dispatchers.IO)
+
 
     override suspend fun getSystemInfo(foundedIpv4: List<String>): Flow<RequestResult<SystemInfoResponse?, NetworkError>> = flow {
         for (ip in foundedIpv4) {
             val retrofit = createApiForIp(ip)
-            val result = safeApiCall { retrofit.getSystemInfo() }
+            val result = safeApiCall(
+                url = ip,
+                apiCall = retrofit::getSystemInfo,
+            )
             emit(result)
         }
     }.flowOn(Dispatchers.IO)
@@ -103,12 +126,11 @@ class DccApiRepositoryImpl(
     private suspend fun pingIp(ip: String): Boolean {
         return withContext(Dispatchers.IO) {
             try {
-                InetAddress.getByName(ip).isReachable(50)
+                InetAddress.getByName(ip).isReachable(1000)
             } catch (e: Exception) {
                 false
             }
         }
     }
-
 
 }

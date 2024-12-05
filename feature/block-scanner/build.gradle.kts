@@ -52,6 +52,12 @@ dependencies {
     ksp(libs.dagger.hilt.compiler)
     implementation(libs.dagger.hilt.navigation)
 
+    // Swipe Refresh
+    implementation(libs.swiperefresh.compose)
+
+    // Shimmer
+    implementation(libs.shimmer.compose)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
