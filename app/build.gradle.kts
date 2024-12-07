@@ -54,6 +54,7 @@ android {
 
 dependencies {
     implementation(project(":feature:block-scanner"))
+    implementation(project(":feature:settings"))
     implementation(project(":core:resource"))
 
     //Navigation

@@ -11,6 +11,7 @@ import com.ulstu.api.domain.service.DccApi
 import com.ulstu.api.domain.utils.NetworkError
 import com.ulstu.api.domain.models.PingStatusResponse
 import com.ulstu.api.domain.utils.RequestResult
+import com.ulstu.shared_prefs.domain.repository.SharedPrefsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -29,6 +30,7 @@ import java.net.SocketTimeoutException
 class DccApiRepositoryImpl(
     private val context: Context,
     private val dccRetrofitBuilder: Retrofit.Builder,
+    private val sharedPrefsRepository: SharedPrefsRepository,
 ): DccApiRepository {
     private suspend fun <T> safeApiCall(url: String, apiCall: suspend () -> T): RequestResult<T, NetworkError> {
         return try {
@@ -55,20 +57,10 @@ class DccApiRepositoryImpl(
     override suspend fun scanNetwork(): Flow<PingStatusResponse> = flow {
         val localIp = getLocalIp() ?: return@flow
         val ipRange = generateIpRange(localIp)
-
-        /*ipRange.asFlow()
-            .collect { ip ->
-                val status = if (pingIp(ip)) {
-                    PingStatus.PingSuccess(ip = ip)
-                } else {
-                    PingStatus.PingFail(ip = ip)
-                }
-                emit(status)
-            }
-     }.flowOn(Dispatchers.IO)*/
+        val concurrency = sharedPrefsRepository.getNumberPingStreams().coerceAtLeast(1)
 
         ipRange.asFlow()
-            .flatMapMerge(concurrency = 50) { ip ->
+            .flatMapMerge(concurrency = concurrency) { ip ->
                 flow {
                     val status = if (pingIp(ip)) {
                         PingStatusResponse.PingSuccess(ip = ip)
@@ -124,9 +116,11 @@ class DccApiRepositoryImpl(
     }
 
     private suspend fun pingIp(ip: String): Boolean {
+        val timeout = sharedPrefsRepository.getPingTime().coerceAtLeast(1)
+
         return withContext(Dispatchers.IO) {
             try {
-                InetAddress.getByName(ip).isReachable(1000)
+                InetAddress.getByName(ip).isReachable(timeout)
             } catch (e: Exception) {
                 false
             }

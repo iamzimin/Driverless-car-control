@@ -26,7 +26,6 @@ import com.ulstu.resource.ui.theme.AppTheme
 import com.ulstu.resource.ui.theme.DriverlessCarControlTheme
 import androidx.compose.ui.unit.dp
 import com.ulstu.resource.R
-import com.ulstu.resource.ui.extensions.clickableRipple
 import com.ulstu.resource.ui.theme.BorderRadius
 import com.ulstu.resource.ui.theme.VerticalPadding
 import com.valentinilk.shimmer.shimmer

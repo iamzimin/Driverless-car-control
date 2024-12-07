@@ -2,6 +2,7 @@
     <string name="app_name">Driverless car control</string>
 
     <!--Block scanner screen-->
+    <string name="block_scanner">Block scanner</string>
     <string name="detected_blocks">Detected blocks</string>
     <string name="no_ip_found_network">No IP found on the network</string>
     <string name="scanning_ip_addresses">Scanning IP addresses</string>
@@ -15,6 +16,14 @@
     <string name="ip">ip</string>
     <string name="mask">Mask</string>
     <string name="gateway">Gateway</string>
+
+    <!--Settings screen-->
+    <string name="enter">Enter</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+    <string name="pint_time_ms">Ping time (ms)</string>
+    <string name="number_ping_streams">Number of ping streams</string>
+    <string name="invalid_data_format">Invalid data format</string>
 
 
 </resources>

@@ -19,7 +19,7 @@ data class NavigationItem(
             ),
             NavigationItem(
                 title = "Settings",
-                route = "block-scanner",
+                route = "settings",
                 icon = Icons.Filled.Settings,
             ),
         )

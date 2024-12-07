@@ -54,6 +54,8 @@ import com.ulstu.resource.ui.theme.AppTheme
 import com.ulstu.resource.ui.theme.DriverlessCarControlTheme
 import kotlinx.coroutines.launch
 import com.ulstu.resource.R
+import com.ulstu.resource.ui.theme.VerticalPadding
+import com.ulstu.settings.presentation.SettingsRoot
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,7 +81,7 @@ fun MainScreen() {
                 ModalDrawerSheet(
                     drawerContainerColor = AppTheme.colors.tileBackground,
                 ) {
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(VerticalPadding))
 
                     Text(
                         modifier = Modifier
@@ -181,6 +183,9 @@ fun MainScreen() {
                 ) {
                     composable(route = "block-scanner") {
                         BlockScannerRoot()
+                    }
+                    composable(route = "settings") {
+                        SettingsRoot()
                     }
                     composable(route = "webview-screen/{url}") { backStackEntry ->
                         val url = backStackEntry.arguments?.getString("url") ?: ""

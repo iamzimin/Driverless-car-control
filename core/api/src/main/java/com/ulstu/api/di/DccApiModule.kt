@@ -3,6 +3,7 @@ package com.ulstu.api.di
 import android.content.Context
 import com.ulstu.api.data.repository.DccApiRepositoryImpl
 import com.ulstu.api.domain.repository.DccApiRepository
+import com.ulstu.shared_prefs.domain.repository.SharedPrefsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,10 +40,12 @@ object DccApiModule {
     fun provideDccApiRepository(
         @ApplicationContext context: Context,
         dccRetrofitBuilder: Retrofit.Builder,
+        sharedPrefsRepository: SharedPrefsRepository,
     ): DccApiRepository {
         return DccApiRepositoryImpl(
             context = context,
             dccRetrofitBuilder = dccRetrofitBuilder,
+            sharedPrefsRepository = sharedPrefsRepository,
         )
     }
 }
