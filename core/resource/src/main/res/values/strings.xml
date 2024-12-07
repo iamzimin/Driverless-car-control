@@ -6,16 +6,23 @@
     <string name="detected_blocks">Detected blocks</string>
     <string name="no_ip_found_network">No IP found on the network</string>
     <string name="scanning_ip_addresses">Scanning IP addresses</string>
-    <string name="success">success</string>
-    <string name="fail">fail</string>
-    <string name="found">found</string>
-    <string name="error">error</string>
+    <string name="success">Success</string>
+    <string name="fail">Fail</string>
+    <string name="detected">Detected</string>
     <string name="blocks_not_found">The blocks were not found</string>
     <string name="swipe_to_update">Swipe to update</string>
     <string name="block">Block</string>
     <string name="ip">ip</string>
     <string name="mask">Mask</string>
     <string name="gateway">Gateway</string>
+    <string name="error_serialization">Serialization error</string>
+    <string name="error_not_found">Not found</string>
+    <string name="error_request_timeout">Request timeout</string>
+    <string name="error_too_many_requests">Too many requests</string>
+    <string name="error_server_error">Server error</string>
+    <string name="error_connect_exception">Connection error</string>
+    <string name="error_protocol_exception">Protocol error</string>
+    <string name="error_unknown">Unknown error</string>
 
     <!--Settings screen-->
     <string name="enter">Enter</string>

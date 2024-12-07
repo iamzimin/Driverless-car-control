@@ -35,8 +35,20 @@ data class OutputInfo(
             builder.append("\n${context.getString(R.string.detected_blocks)}:\n\n")
             foundedBlocks.forEach { block ->
                 when (block) {
-                    is RequestResult.Success -> builder.append("${block.data?.ip} - ${context.getString(R.string.found)}\n")
-                    is RequestResult.Error -> builder.append("${block.url} - ${context.getString(R.string.error)} ${block.error}\n")
+                    is RequestResult.Success -> builder.append("${block.data?.ip} - ${context.getString(R.string.detected)}\n")
+                    is RequestResult.Error -> {
+                        val errorText = when (block.error) {
+                            NetworkError.SERIALIZATION -> context.getString(R.string.error_serialization)
+                            NetworkError.NOT_FOUND -> context.getString(R.string.error_not_found)
+                            NetworkError.REQUEST_TIMEOUT -> context.getString(R.string.error_request_timeout)
+                            NetworkError.TOO_MANY_REQUESTS -> context.getString(R.string.error_too_many_requests)
+                            NetworkError.SERVER_ERROR -> context.getString(R.string.error_server_error)
+                            NetworkError.CONNECT_EXCEPTION -> context.getString(R.string.error_connect_exception)
+                            NetworkError.PROTOCOL_EXCEPTION -> context.getString(R.string.error_protocol_exception)
+                            NetworkError.UNKNOWN -> context.getString(R.string.error_unknown)
+                        }
+                        builder.append("${block.url} - $errorText\n")
+                    }
                 }
             }
         }

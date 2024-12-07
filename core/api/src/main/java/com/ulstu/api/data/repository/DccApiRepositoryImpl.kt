@@ -25,6 +25,7 @@ import retrofit2.Retrofit
 import java.net.ConnectException
 import java.net.Inet4Address
 import java.net.InetAddress
+import java.net.ProtocolException
 import java.net.SocketTimeoutException
 
 class DccApiRepositoryImpl(
@@ -39,6 +40,7 @@ class DccApiRepositoryImpl(
             RequestResult.Error(url, NetworkError.SERIALIZATION)
         } catch (e: HttpException) {
             when (e.code()) {
+                404 -> RequestResult.Error(url, NetworkError.NOT_FOUND)
                 408 -> RequestResult.Error(url, NetworkError.REQUEST_TIMEOUT)
                 429 -> RequestResult.Error(url, NetworkError.TOO_MANY_REQUESTS)
                 in 500..599 -> RequestResult.Error(url, NetworkError.SERVER_ERROR)
@@ -48,6 +50,8 @@ class DccApiRepositoryImpl(
             RequestResult.Error(url, NetworkError.REQUEST_TIMEOUT)
         } catch (e: ConnectException) {
             RequestResult.Error(url, NetworkError.CONNECT_EXCEPTION)
+        } catch (e: ProtocolException) {
+            RequestResult.Error(url, NetworkError.PROTOCOL_EXCEPTION)
         } catch (e: Exception) {
             RequestResult.Error(url, NetworkError.UNKNOWN)
         }
