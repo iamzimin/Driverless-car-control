@@ -141,9 +141,9 @@ fun BlockInfoTilePreview(darkTheme: Boolean = true) {
             BlockInfoTile(
                 blockInfo = BlockInfo(
                     systemInfo = SystemInfo(
-                        ip = "123",
-                        ma = "123",
-                        gw = "123",
+                        ip = "123.123.1.123",
+                        ma = "123.123.123.0",
+                        gw = "123.123.1.1",
                     ),
                     unitInfo = UnitInfo(
                         unitName = "Блок BMS и инверторов",

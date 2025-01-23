@@ -3,7 +3,6 @@ package com.ulstu.block_scanner.presentation
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,21 +10,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.ulstu.block_scanner.domain.model.SystemInfo
+import androidx.compose.ui.unit.Dp
 import com.ulstu.resource.ui.theme.AppTheme
 import com.ulstu.resource.ui.theme.DriverlessCarControlTheme
 import androidx.compose.ui.unit.dp
-import com.ulstu.resource.R
 import com.ulstu.resource.ui.theme.BorderRadius
 import com.ulstu.resource.ui.theme.VerticalPadding
 import com.valentinilk.shimmer.shimmer
@@ -59,32 +54,31 @@ fun BlockInfoTileShimmer() {
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Box(
-                modifier = Modifier.shimmer(),
-            ) {
-                Box(
-                    modifier = Modifier
-                        .height(10.dp)
-                        .width(120.dp)
-                        .clip(shape = RoundedCornerShape(BorderRadius))
-                        .background(shimmerColor)
-                )
-            }
+            InfoShimmer(shimmerColor = shimmerColor, width = 120.dp)
             Spacer(modifier = Modifier.height(5.dp))
-            Box(
-                modifier = Modifier.shimmer(),
-            ) {
-                Box(
-                    modifier = Modifier
-                        .height(10.dp)
-                        .width(140.dp)
-                        .clip(shape = RoundedCornerShape(BorderRadius))
-                        .background(shimmerColor)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(VerticalPadding))
+            InfoShimmer(shimmerColor = shimmerColor, width = 110.dp)
+            Spacer(modifier = Modifier.height(5.dp))
+            InfoShimmer(shimmerColor = shimmerColor, width = 120.dp)
+            Spacer(modifier = Modifier.height(5.dp))
+            InfoShimmer(shimmerColor = shimmerColor, width = 100.dp)
+            Spacer(modifier = Modifier.height(5.dp))
+            InfoShimmer(shimmerColor = shimmerColor, width = 150.dp)
         }
+    }
+}
+
+@Composable
+private fun InfoShimmer(shimmerColor: Color, width: Dp) {
+    Box(
+        modifier = Modifier.shimmer(),
+    ) {
+        Box(
+            modifier = Modifier
+                .height(10.dp)
+                .width(width)
+                .clip(shape = RoundedCornerShape(BorderRadius))
+                .background(shimmerColor)
+        )
     }
 }
 
@@ -92,9 +86,12 @@ fun BlockInfoTileShimmer() {
 @Composable
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun BlockInfoTileShimmerPreview(darkTheme: Boolean = true) {
-    DriverlessCarControlTheme(darkTheme = darkTheme) {
-        Surface(color = AppTheme.colors.background) {
-            BlockInfoTileShimmer()
+    Column {
+        DriverlessCarControlTheme(darkTheme = darkTheme) {
+            Surface(color = AppTheme.colors.background) {
+                BlockInfoTileShimmer()
+            }
         }
+        BlockInfoTilePreview(darkTheme = darkTheme)
     }
 }
