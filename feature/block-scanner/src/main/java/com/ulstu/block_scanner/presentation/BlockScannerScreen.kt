@@ -26,6 +26,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -58,12 +59,14 @@ fun BlockScannerScreen(
     startScan: () -> Unit,
 ) {
     val context = LocalContext.current
+    val configuration = LocalConfiguration.current
     val outputInfoScrollState = rememberScrollState()
     val refreshingState = rememberSwipeRefreshState(isRefreshing = false)
     val successSystemInfoBlocks = state.outputInfo.foundedBlocks
         ?.filterIsInstance<RequestResult.Success<BlockInfo, NetworkError>>()
         ?.map { it.data }
     val lazyColumnSpacedBy = 10.dp
+    val screenHeight = configuration.screenHeightDp.dp
 
     LaunchedEffect(state.outputInfo) {
         outputInfoScrollState.animateScrollTo(outputInfoScrollState.maxValue)
@@ -77,6 +80,7 @@ fun BlockScannerScreen(
                 start = HorizontalPadding,
                 end = HorizontalPadding,
             )
+            .verticalScroll(rememberScrollState())
     ) {
         Box(
             modifier = Modifier
@@ -109,6 +113,8 @@ fun BlockScannerScreen(
         Spacer(modifier = Modifier.height(VerticalPadding))
 
         SwipeRefresh(
+            modifier = Modifier
+                .height(screenHeight),
             state = refreshingState,
             onRefresh = { startScan() },
             indicator = { state, trigger ->
@@ -134,7 +140,7 @@ fun BlockScannerScreen(
             } else if (successSystemInfoBlocks.isNullOrEmpty()) {
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
                         .verticalScroll(rememberScrollState()),
                     contentAlignment = Alignment.Center,
                 ) {
@@ -183,7 +189,7 @@ fun BlockScannerScreen(
 }
 
 @Composable
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES) // device = "spec:width=900dp,height=200dp"
 fun TestsListScreenPreview(darkTheme: Boolean = true) {
     DriverlessCarControlTheme(darkTheme = darkTheme) {
         Surface(color = AppTheme.colors.background) {
@@ -191,7 +197,7 @@ fun TestsListScreenPreview(darkTheme: Boolean = true) {
                 navigation = NavHostController(LocalContext.current),
                 startScan = {},
                 state = BlockScannerState(
-                    isBlockScannerLoading = false,
+                    isBlockScannerLoading = true,
                     outputInfo = OutputInfo(
                         foundedBlocks = listOf(
                             RequestResult.Success(
