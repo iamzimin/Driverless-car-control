@@ -6,7 +6,7 @@ import com.ulstu.api.domain.utils.NetworkError
 import com.ulstu.api.domain.utils.RequestResult
 import com.ulstu.block_scanner.domain.mapper.toPingStatus
 import com.ulstu.block_scanner.domain.model.PingStatus
-import com.ulstu.block_scanner.domain.model.SystemInfo
+import com.ulstu.block_scanner.domain.model.BlockInfo
 import com.ulstu.block_scanner.domain.usecase.BlockScannerUseCases
 import com.ulstu.block_scanner.presentation.model.OutputInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,9 +38,9 @@ class BlockScannerViewModel @Inject constructor(
                 )}
             }
 
-            val blocks = mutableListOf<RequestResult<SystemInfo?, NetworkError>>()
+            val blocks = mutableListOf<RequestResult<BlockInfo, NetworkError>>()
             val successIps = foundedIps.filterIsInstance<PingStatus.PingSuccess>().map { it.ip }
-            blockScannerUseCases.getSystemInfoUseCase.invoke(successIps).collect { result ->
+            blockScannerUseCases.getBlockInfoUseCase.invoke(successIps).collect { result ->
                 blocks.add(result)
                 reduce { state.copy(
                     outputInfo = state.outputInfo.copy(foundedBlocks = blocks.toList())

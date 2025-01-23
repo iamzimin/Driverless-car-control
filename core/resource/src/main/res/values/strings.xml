@@ -12,9 +12,8 @@
     <string name="blocks_not_found">The blocks were not found</string>
     <string name="swipe_to_update">Swipe to update</string>
     <string name="block">Block</string>
-    <string name="ip">ip</string>
-    <string name="mask">Mask</string>
-    <string name="gateway">Gateway</string>
+    <string name="hw">hw</string>
+    <string name="fw">fw</string>
     <string name="error_serialization">Serialization error</string>
     <string name="error_not_found">Not found</string>
     <string name="error_request_timeout">Request timeout</string>

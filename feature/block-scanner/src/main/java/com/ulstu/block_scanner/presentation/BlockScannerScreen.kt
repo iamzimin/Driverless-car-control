@@ -1,7 +1,6 @@
 package com.ulstu.block_scanner.presentation
 
 import android.content.res.Configuration
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
@@ -18,9 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,10 +38,12 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ulstu.api.domain.utils.NetworkError
 import com.ulstu.api.domain.utils.RequestResult
+import com.ulstu.block_scanner.domain.model.BlockInfo
 import com.ulstu.block_scanner.domain.model.SystemInfo
+import com.ulstu.block_scanner.domain.model.UnitInfo
 import com.ulstu.block_scanner.presentation.model.OutputInfo
-import com.ulstu.resource.R
 import com.ulstu.block_scanner.presentation.mvi.BlockScannerState
+import com.ulstu.resource.R
 import com.ulstu.resource.ui.theme.AppTheme
 import com.ulstu.resource.ui.theme.BorderRadius
 import com.ulstu.resource.ui.theme.DriverlessCarControlTheme
@@ -62,8 +61,8 @@ fun BlockScannerScreen(
     val outputInfoScrollState = rememberScrollState()
     val refreshingState = rememberSwipeRefreshState(isRefreshing = false)
     val successSystemInfoBlocks = state.outputInfo.foundedBlocks
-        ?.filterIsInstance<RequestResult.Success<SystemInfo?, NetworkError>>()
-        ?.mapNotNull { it.data }
+        ?.filterIsInstance<RequestResult.Success<BlockInfo, NetworkError>>()
+        ?.map { it.data }
     val lazyColumnSpacedBy = 10.dp
 
     LaunchedEffect(state.outputInfo) {
@@ -195,15 +194,25 @@ fun TestsListScreenPreview(darkTheme: Boolean = true) {
                     isBlockScannerLoading = false,
                     outputInfo = OutputInfo(
                         foundedBlocks = listOf(
-                            RequestResult.Success(SystemInfo(
-                                dhcp = "123",
-                                ip = "123",
-                                ma = "123",
-                                gw = "123",)
+                            RequestResult.Success(
+                                BlockInfo(
+                                    systemInfo = SystemInfo(
+                                        ip = "123",
+                                        ma = "123",
+                                        gw = "123",
+                                    ),
+                                    unitInfo = UnitInfo(
+                                        unitName = "Блок BMS и инверторов",
+                                        firmwareVer = "2.1",
+                                        hardwareVer = "2.0",
+                                        buildDate = "Jan 23 2025",
+                                        buildTime = "01:31:45",
+                                    )
+                                )
                             ),
-                        )
-                    )
-                ),
+                        ),
+                    ),
+                )
             )
         }
     }

@@ -4,12 +4,12 @@ import android.content.Context
 import com.ulstu.api.domain.utils.NetworkError
 import com.ulstu.api.domain.utils.RequestResult
 import com.ulstu.block_scanner.domain.model.PingStatus
-import com.ulstu.block_scanner.domain.model.SystemInfo
+import com.ulstu.block_scanner.domain.model.BlockInfo
 import com.ulstu.resource.R
 
 data class OutputInfo(
     val foundedIps: List<PingStatus>? = null,
-    val foundedBlocks: List<RequestResult<SystemInfo?, NetworkError>>? = null,
+    val foundedBlocks: List<RequestResult<BlockInfo, NetworkError>>? = null,
 ) {
     fun toConsole(context: Context): String {
         val builder = StringBuilder()
@@ -35,7 +35,7 @@ data class OutputInfo(
             builder.append("\n${context.getString(R.string.detected_blocks)}:\n\n")
             foundedBlocks.forEach { block ->
                 when (block) {
-                    is RequestResult.Success -> builder.append("${block.data?.ip} - ${context.getString(R.string.detected)}\n")
+                    is RequestResult.Success -> builder.append("${block.data.systemInfo.ip} - ${context.getString(R.string.detected)}\n")
                     is RequestResult.Error -> {
                         val errorText = when (block.error) {
                             NetworkError.SERIALIZATION -> context.getString(R.string.error_serialization)

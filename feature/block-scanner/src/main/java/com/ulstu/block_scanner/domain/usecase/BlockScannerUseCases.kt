@@ -4,5 +4,5 @@ import javax.inject.Inject
 
 class BlockScannerUseCases @Inject constructor(
     val scanNetworkUseCase: ScanNetworkUseCase,
-    val getSystemInfoUseCase: GetSystemInfoUseCase,
+    val getBlockInfoUseCase: GetBlockInfoUseCase,
 )

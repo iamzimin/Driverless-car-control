@@ -5,15 +5,18 @@ import android.net.ConnectivityManager
 import android.net.LinkAddress
 import android.net.NetworkCapabilities
 import com.google.gson.JsonParseException
-import com.ulstu.api.domain.models.SystemInfoResponse
+import com.ulstu.api.domain.mapper.mergeSystemAndUnitResults
 import com.ulstu.api.domain.repository.DccApiRepository
 import com.ulstu.api.domain.service.DccApi
 import com.ulstu.api.domain.utils.NetworkError
 import com.ulstu.api.domain.models.PingStatusResponse
+import com.ulstu.api.domain.models.BlockInfoResponse
 import com.ulstu.api.domain.utils.RequestResult
 import com.ulstu.shared_prefs.domain.repository.SharedPrefsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flatMapMerge
@@ -80,13 +83,22 @@ class DccApiRepositoryImpl(
     }.flowOn(Dispatchers.IO)
 
 
-    override suspend fun getSystemInfo(foundedIpv4: List<String>): Flow<RequestResult<SystemInfoResponse?, NetworkError>> = flow {
+    override suspend fun getBlockInfo(foundedIpv4: List<String>): Flow<RequestResult<BlockInfoResponse, NetworkError>> = flow {
         for (ip in foundedIpv4) {
             val retrofit = createApiForIp(ip)
-            val result = safeApiCall(
-                url = ip,
-                apiCall = retrofit::getSystemInfo,
-            )
+            val result = coroutineScope {
+                val systemInfoDeferred = async { safeApiCall(url = ip, apiCall = retrofit::getSystemInfo) }
+                val unitInfoDeferred = async { safeApiCall(url = ip, apiCall = retrofit::getUnitInfo) }
+
+                val systemInfoResult = systemInfoDeferred.await()
+                val unitInfoResult = unitInfoDeferred.await()
+
+                mergeSystemAndUnitResults(
+                    systemResult = systemInfoResult,
+                    unitResult = unitInfoResult,
+                    ip = ip,
+                )
+            }
             emit(result)
         }
     }.flowOn(Dispatchers.IO)
