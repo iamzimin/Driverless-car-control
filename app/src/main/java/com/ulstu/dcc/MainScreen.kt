@@ -95,7 +95,7 @@ fun MainScreen() {
                     NavigationDrawerItem(
                         label = {
                             Text(
-                                text = item.title,
+                                text = stringResource(item.title),
                                 style = AppTheme.typography.body,
                                 color = AppTheme.colors.text,
                             )
@@ -122,7 +122,7 @@ fun MainScreen() {
                             Icon(
                                 modifier = Modifier.size(20.dp),
                                 painter = painterResource(id = item.icon),
-                                contentDescription = item.title,
+                                contentDescription = stringResource(item.title),
                                 tint = AppTheme.colors.text,
                             )
                         },
@@ -139,7 +139,7 @@ fun MainScreen() {
                 val titleName = if (isWebViewScreen) {
                     siteUrl ?: "..."
                 } else {
-                    NavigationItem.items[selectedItemIndex].title
+                    stringResource(NavigationItem.items[selectedItemIndex].title)
                 }
                 val icon = if (isWebViewScreen) {
                     Icons.AutoMirrored.Filled.ArrowBack
@@ -178,7 +178,7 @@ fun MainScreen() {
         ) { paddingValues ->
             NavHost(
                 navController = navController,
-                startDestination = Route.CarControl,
+                startDestination = Route.BlockScanner,
                 modifier = Modifier.padding(paddingValues)
             ) {
                 composable<Route.BlockScanner> {

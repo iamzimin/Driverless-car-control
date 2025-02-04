@@ -1,27 +1,28 @@
 package com.ulstu.dcc
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.ulstu.resource.R
 
 data class NavigationItem(
-    val title: String,
+    @StringRes val title: Int,
     val route: Route,
     @DrawableRes val icon: Int,
 ) {
     companion object {
         val items = listOf(
             NavigationItem(
-                title = "Block scanner",
+                title = R.string.block_scanner,
                 route = Route.BlockScanner,
                 icon = R.drawable.cube,
             ),
             NavigationItem(
-                title = "Car control",
+                title = R.string.car_control,
                 route = Route.CarControl,
                 icon = R.drawable.steering_wheel,
             ),
             NavigationItem(
-                title = "Settings",
+                title = R.string.settings,
                 route = Route.Settings,
                 icon = R.drawable.settings,
             ),

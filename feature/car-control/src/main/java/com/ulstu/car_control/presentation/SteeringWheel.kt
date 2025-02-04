@@ -13,7 +13,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
@@ -36,8 +38,8 @@ fun SteeringWheel(
     modifier: Modifier = Modifier,
     onAngleChange: (Float) -> Unit
 ) {
-    var wheelAngle by remember { mutableFloatStateOf(0f) }
-    var touchAngle by remember { mutableFloatStateOf(0f) }
+    var wheelAngle by rememberSaveable { mutableFloatStateOf(0f) }
+    var touchAngle by rememberSaveable { mutableFloatStateOf(0f) }
     var currentSize by remember { mutableStateOf(IntSize.Zero) }
     val animatedAngle by animateFloatAsState(
         targetValue = wheelAngle,
@@ -82,6 +84,18 @@ fun SteeringWheel(
                 )
             }
     ) {
+        Icon(
+            modifier = Modifier
+                .rotate(animatedAngle),
+            painter = painterResource(id = R.drawable.steering_wheel),
+            contentDescription = null,
+            tint = Color.Unspecified,
+        )
+        Text(
+            modifier = Modifier.align(Alignment.TopEnd),
+            text = wheelAngle.toString(),
+            color = AppTheme.colors.text,
+        )
         /*Canvas(
             modifier = Modifier
                 .fillMaxSize()
@@ -104,17 +118,6 @@ fun SteeringWheel(
                 strokeWidth = 4f
             )
         }*/
-        Icon(
-            modifier = Modifier
-                .rotate(animatedAngle),
-            painter = painterResource(id = R.drawable.steering_wheel),
-            contentDescription = null,
-            tint = Color.Unspecified,
-        )
-        Text(
-            text = wheelAngle.toString(),
-            color = AppTheme.colors.text,
-        )
     }
 }
 

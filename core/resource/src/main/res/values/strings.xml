@@ -23,7 +23,11 @@
     <string name="error_protocol_exception">Protocol error</string>
     <string name="error_unknown">Unknown error</string>
 
+    <!--Car control-->
+    <string name="car_control">Car control</string>
+
     <!--Settings screen-->
+    <string name="settings">Settings</string>
     <string name="enter">Enter</string>
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
