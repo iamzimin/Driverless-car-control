@@ -33,7 +33,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -54,7 +53,7 @@ import com.ulstu.resource.ui.theme.VerticalPadding
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BlockScannerScreen(
-    navigation: NavHostController,
+    onWebViewScreen: (url: String) -> Unit,
     state: BlockScannerState,
     startScan: () -> Unit,
 ) {
@@ -177,8 +176,8 @@ fun BlockScannerScreen(
                     ) { index ->
                         BlockInfoTile(
                             blockInfo = successSystemInfoBlocks[index],
-                            onClick = {
-                                navigation.navigate("webview-screen/$it")
+                            onClick = { url ->
+                                onWebViewScreen(url)
                             }
                         )
                     }
@@ -194,7 +193,7 @@ fun TestsListScreenPreview(darkTheme: Boolean = true) {
     DriverlessCarControlTheme(darkTheme = darkTheme) {
         Surface(color = AppTheme.colors.background) {
             BlockScannerScreen(
-                navigation = NavHostController(LocalContext.current),
+                onWebViewScreen = {},
                 startScan = {},
                 state = BlockScannerState(
                     isBlockScannerLoading = true,

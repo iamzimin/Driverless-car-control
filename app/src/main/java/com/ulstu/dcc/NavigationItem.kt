@@ -7,19 +7,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 data class NavigationItem(
     val title: String,
-    val route: String,
+    val route: Route,
     val icon: ImageVector,
 ) {
     companion object {
         val items = listOf(
             NavigationItem(
                 title = "Block scanner",
-                route = "block-scanner",
+                route = Route.BlockScanner,
                 icon = Icons.Filled.Home,
             ),
             NavigationItem(
                 title = "Settings",
-                route = "settings",
+                route = Route.Settings,
                 icon = Icons.Filled.Settings,
             ),
         )
