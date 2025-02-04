@@ -178,7 +178,7 @@ fun MainScreen() {
         ) { paddingValues ->
             NavHost(
                 navController = navController,
-                startDestination = Route.BlockScanner,
+                startDestination = Route.CarControl,
                 modifier = Modifier.padding(paddingValues)
             ) {
                 composable<Route.BlockScanner> {

@@ -1,6 +1,7 @@
 package com.ulstu.dcc
 
 import androidx.annotation.DrawableRes
+import com.ulstu.resource.R
 
 data class NavigationItem(
     val title: String,
