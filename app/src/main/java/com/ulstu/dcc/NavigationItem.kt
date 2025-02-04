@@ -1,26 +1,28 @@
 package com.ulstu.dcc
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.DrawableRes
 
 data class NavigationItem(
     val title: String,
     val route: Route,
-    val icon: ImageVector,
+    @DrawableRes val icon: Int,
 ) {
     companion object {
         val items = listOf(
             NavigationItem(
                 title = "Block scanner",
                 route = Route.BlockScanner,
-                icon = Icons.Filled.Home,
+                icon = R.drawable.cube,
+            ),
+            NavigationItem(
+                title = "Car control",
+                route = Route.CarControl,
+                icon = R.drawable.steering_wheel,
             ),
             NavigationItem(
                 title = "Settings",
                 route = Route.Settings,
-                icon = Icons.Filled.Settings,
+                icon = R.drawable.settings,
             ),
         )
     }

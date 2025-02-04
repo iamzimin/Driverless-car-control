@@ -55,6 +55,7 @@ android {
 
 dependencies {
     implementation(project(":feature:block-scanner"))
+    implementation(project(":feature:car-control"))
     implementation(project(":feature:settings"))
     implementation(project(":core:resource"))
 

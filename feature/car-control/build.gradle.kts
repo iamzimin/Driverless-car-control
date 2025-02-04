@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.ulstu.block_scanner"
+    namespace = "com.ulstu.car_control"
     compileSdk = 35
 
     defaultConfig {
@@ -27,17 +27,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 
 dependencies {
     implementation(project(":core:resource"))
-    implementation(project(":core:api"))
+    //implementation(project(":core:api"))
 
     // MVI Orbit
     implementation(libs.mvi.orbit.core)
@@ -48,12 +48,6 @@ dependencies {
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.compiler)
     implementation(libs.dagger.hilt.navigation)
-
-    // Swipe Refresh
-    implementation(libs.swiperefresh.compose)
-
-    // Shimmer
-    implementation(libs.shimmer.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
